@@ -1,7 +1,8 @@
 ---
 title: "Storms"
 output: 
-  flexdashboard::flex_dashboard
+  flexdashboard::flex_dashboard:
+    vertical_layout: fill
     
 ---
 
@@ -24,36 +25,51 @@ suppressPackageStartupMessages(library(lubridate))
 ```
 
 
-```{r}
+```{r, include = FALSE}
 storms = storms[,c(-12,-13)]
 date = make_date(year = storms$year, month = storms$month, day = storms$day)
 
 storms = cbind(storms, date)
 ```
-Page 1
+Understanding the Data
 ===========================
-```{r}
+
+Column {data-width=600}
+-------------------------------------
+
+###Lineplot: Wind vs. Pressure
+
+```{r, echo = FALSE, eval = TRUE}
 
 lineplot = ggplot(data = storms, mapping = aes(x = wind, y = pressure, color = status)) + geom_line()
-
-barplot = ggplot(data = storms, mapping = aes(x=status, fill=category)) + geom_bar()
-
-histogram = ggplot(data = storms, mapping = aes(x=year, fill = category), ) + geom_histogram(binwidth = 10, position = "dodge2") + scale_fill_manual("Category", values = c("-1" = "purple", "0" = "blue", "1" = "cyan", "2" = "green", "3" = "yellow", "4" = "orange", "5" = "red"))
-
-
-
 ggplotly(lineplot)
-ggplotly(barplot)
-ggplotly(histogram)
-
-
 
 ```
+
+Column {data-width=400}
+-------------------------------------
+### Barplot: How Category Relates to Status 
+
+```{r, echo = FALSE, eval = TRUE}
+barplot = ggplot(data = storms, mapping = aes(x=status, fill=category)) + geom_bar()
+ggplotly(barplot)
+```
+
+### Barplot: Number of Hurricanes for Each Decade
+
+```{r, echo = FALSE, eval = TRUE}
+histogram = ggplot(data = storms, mapping = aes(x=year, fill = category), ) + geom_histogram(binwidth = 10, position = "dodge2") 
+#scale_fill_manual("Category", values = c("-1" = "purple", "0" = "blue", "1" = "cyan", "2" = "green", "3" = "yellow", "4" = "orange", "5" = #"red"))
+ggplotly(histogram)
+``` 
+
 
 1975-1985
 ================================
 
-```{r}
+
+### Map by Names
+```{r, echo = FALSE, eval = TRUE}
 #1975-1985 for Names
 
 stormsnames1 = storms %>% slice(1:1554)
@@ -62,7 +78,7 @@ stormsnames1 = stormsnames1[order(stormsnames1$name),]
 stormsnamescolor1 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormsnames1$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormsnames1$lat, 
@@ -81,7 +97,7 @@ leaflet() %>%
     options = layersControlOptions(collapsed=FALSE)) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormsnamescolor1, 
     values = stormsnames1$category,
     title = 'Category',
@@ -89,8 +105,9 @@ leaflet() %>%
 
 ```
 
+### Map by Category
 
-```{r}
+```{r, echo = FALSE, eval = TRUE}
 #1975-1985 for Category
 
 stormscategory1 = storms %>% slice(1:1554)
@@ -99,7 +116,7 @@ stormscategory1 = stormscategory1[order(stormscategory1$category),]
 stormscategorycolor1 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormscategory1$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormscategory1$lat, 
@@ -120,7 +137,7 @@ leaflet() %>%
   hideGroup(c("0", "1", "2", "3", "4", "-1")) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormscategorycolor1, 
     values = stormscategory1$category,
     title = 'Category',
@@ -132,7 +149,9 @@ leaflet() %>%
 1986-1995
 ===========================
 
-```{r}
+### Map by Names
+
+```{r, echo = FALSE, eval = TRUE}
 #1985-1995 for Names
 
 stormsnames2 = storms %>% slice(1555:3984)
@@ -141,7 +160,7 @@ stormsnames2 = stormsnames2[order(stormsnames2$name),]
 stormsnamescolor2 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormsnames2$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormsnames2$lat, 
@@ -160,7 +179,7 @@ leaflet() %>%
     options = layersControlOptions(collapsed=FALSE)) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormsnamescolor2, 
     values = stormsnames2$category,
     title = 'Category',
@@ -168,8 +187,9 @@ leaflet() %>%
 
 ```
 
+### Map by Category
 
-```{r}
+```{r, echo = FALSE, eval = TRUE}
 #1985-1995 for Category
 
 stormscategory2 = storms %>% slice(1555:3984)
@@ -178,7 +198,7 @@ stormscategory2 = stormscategory2[order(stormscategory2$category),]
 stormscategorycolor2 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormscategory2$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormscategory2$lat, 
@@ -199,7 +219,7 @@ leaflet() %>%
   hideGroup(c("0", "1", "2", "3", "4", "-1")) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormscategorycolor2, 
     values = stormscategory2$category,
     title = 'Category',
@@ -211,7 +231,9 @@ leaflet() %>%
 1996-2005
 ===========================
 
-```{r}
+### Map by Names
+
+```{r, echo = FALSE, eval = TRUE}
 #1995-2005 for Names
 
 stormsnames3 = storms %>% slice(3985:7379)
@@ -220,7 +242,7 @@ stormsnames3 = stormsnames3[order(stormsnames3$name),]
 stormsnamescolor3 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormsnames3$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormsnames3$lat, 
@@ -239,7 +261,7 @@ leaflet() %>%
     options = layersControlOptions(collapsed=FALSE)) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormsnamescolor3, 
     values = stormsnames3$category,
     title = 'Category',
@@ -248,7 +270,9 @@ leaflet() %>%
 ```
 
 
-```{r}
+### Map by Category
+
+```{r, echo = FALSE, eval = TRUE}
 #1995-2005 for Category
 
 stormscategory3 = storms %>% slice(3985:7379)
@@ -257,7 +281,7 @@ stormscategory3 = stormscategory3[order(stormscategory3$category),]
 stormscategorycolor3 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormscategory3$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormscategory3$lat, 
@@ -278,7 +302,7 @@ leaflet() %>%
   hideGroup(c("0", "1", "2", "3", "4", "-1")) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormscategorycolor3, 
     values = stormscategory3$category,
     title = 'Category',
@@ -290,7 +314,9 @@ leaflet() %>%
 2006-2015
 ===========================
 
-```{r}
+### Map by Names
+
+```{r, echo = FALSE, eval = TRUE}
 #2005-2015 for Names
 
 stormsnames4 = storms %>% slice(7380:10010)
@@ -299,7 +325,7 @@ stormsnames4 = stormsnames4[order(stormsnames4$name),]
 stormsnamescolor4 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormsnames4$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormsnames4$lat, 
@@ -318,7 +344,7 @@ leaflet() %>%
     options = layersControlOptions(collapsed=FALSE)) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormsnamescolor4, 
     values = stormsnames4$category,
     title = 'Category',
@@ -326,8 +352,9 @@ leaflet() %>%
 
 ```
 
+### Map by Category
 
-```{r}
+```{r, echo = FALSE, eval = TRUE}
 #2005-2015 for Category
 
 stormscategory4 = storms %>% slice(7380:10010)
@@ -336,7 +363,7 @@ stormscategory4 = stormscategory4[order(stormscategory4$category),]
 stormscategorycolor4 = colorFactor ( palette = c("purple", "blue","cyan", "green", "yellow", "orange",  "red"), domain = stormscategory4$category)
 
 leaflet() %>% 
-  addProviderTiles(providers$OpenStreetMap.Mapnik) %>%
+  addProviderTiles(providers$ CartoDB.DarkMatter) %>%
   
   addCircleMarkers(
     lat = stormscategory4$lat, 
@@ -357,7 +384,7 @@ leaflet() %>%
   hideGroup(c("0", "1", "2", "3", "4", "-1")) %>%
   
   addLegend(
-    'bottomright', 
+    'bottomleft', 
     pal = stormscategorycolor4, 
     values = stormscategory4$category,
     title = 'Category',
