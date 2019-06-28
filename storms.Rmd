@@ -31,13 +31,14 @@ date = make_date(year = storms$year, month = storms$month, day = storms$day)
 
 storms = cbind(storms, date)
 ```
+
 Understanding the Data
 ===========================
 
 Column {data-width=600}
 -------------------------------------
 
-###Lineplot: Wind vs. Pressure
+###Line Plot: Wind vs. Pressure
 
 ```{r, echo = FALSE, eval = TRUE}
 
@@ -48,18 +49,17 @@ ggplotly(lineplot)
 
 Column {data-width=400}
 -------------------------------------
-### Barplot: How Category Relates to Status 
+### Bar Graph: How Category Relates to Status 
 
 ```{r, echo = FALSE, eval = TRUE}
 barplot = ggplot(data = storms, mapping = aes(x=status, fill=category)) + geom_bar()
 ggplotly(barplot)
 ```
 
-### Barplot: Number of Hurricanes for Each Decade
+### Bar Graph: Number of Hurricanes for Each Decade
 
 ```{r, echo = FALSE, eval = TRUE}
 histogram = ggplot(data = storms, mapping = aes(x=year, fill = category), ) + geom_histogram(binwidth = 10, position = "dodge2") 
-#scale_fill_manual("Category", values = c("-1" = "purple", "0" = "blue", "1" = "cyan", "2" = "green", "3" = "yellow", "4" = "orange", "5" = #"red"))
 ggplotly(histogram)
 ``` 
 
